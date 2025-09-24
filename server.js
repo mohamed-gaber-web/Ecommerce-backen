@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import brandRouter from "./routes/brandRoutes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json()); // to accept JSON data
 
 // Routes
 app.use("/api/categories", categoryRoutes);
+app.use("/api/brands", brandRouter);
 
 const PORT = process.env.PORT || 5000;
 
