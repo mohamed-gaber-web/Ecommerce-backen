@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 
-export const brandValidate = (req, res, next) => {
+export const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Extract only error messages
