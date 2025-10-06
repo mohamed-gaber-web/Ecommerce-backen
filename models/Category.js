@@ -3,15 +3,11 @@ const categorySchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please add a category name"],
       unique: true,
-      trim: true,
     },
     slug: {
       type: String,
-      required: [false],
       unique: true,
-      trim: true,
     },
   },
   {

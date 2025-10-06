@@ -117,3 +117,44 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: "Error updating product", error });
   }
 };
+
+export const productSearch = async (req, res) => {
+  try {
+    const { categoryId, brandId, search, minPrice, maxPrice } = req.query;
+    const filter = {};
+    // build dynamic filter
+    if (categoryId) filter.categoryId = categoryId;
+    if (brandId) filter.brandId = brandId;
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+    if (search) {
+      const safeSearch = String(search).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      filter.$or = [
+        { title: { $regex: safeSearch, $options: "i" } },
+        { shortDescription: { $regex: safeSearch, $options: "i" } },
+        { longDescription: { $regex: safeSearch, $options: "i" } },
+      ];
+    }
+
+    // populate category and brand
+
+    const products = await Product.find(filter)
+      .populate("categoryId", "name")
+      .populate("brandId", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      status: "success",
+      count: products.length,
+      data: products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching products",
+      error: error.message,
+    });
+  }
+};

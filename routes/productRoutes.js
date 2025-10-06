@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getProductById,
   getProducts,
+  productSearch,
   updateProduct,
 } from "../controllers/product.contrroler.js";
 import { createProductValidator } from "../validations/productValidator.js";
@@ -13,6 +14,7 @@ import { validate } from "../middlewares/validatorMiddleware.js";
 const router = express.Router();
 
 router.get("/", getProducts);
+router.get("/search", productSearch);
 router.post("/", createProductValidator, validate, createProduct);
 router.get("/:id", getProductById);
 router.delete("/:id", deleteProduct);
